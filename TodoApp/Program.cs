@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using System.Runtime;
@@ -21,15 +23,9 @@ var app = builder.Build();
 //todoItems.MapDelete("/{id}", CrudEndpoint.DeleteTodo);
 //app.MapGet("/",CrudEndpoint.GetCompleteTodos) ;
 //app.MapPost("/", (TodoModel todo) => CrudEndpoint.AddTodoItem(todo));
-app.MapPost("/", async (Todo todo, MongoDbService db) =>
+app.MapPost("/AddTodo", async ([FromBody]Todo todo, MongoDbService db) =>
 {
-    var newTodo = new Todo()
-    {
-        Id = todo.Id,
-        Name = todo.Name,
-        IsComplete = false
-    };
-    return await db.AddTodo(newTodo);
+    return await db.AddTodo(todo);
     
 });
     app.MapGet("/GetTodoWithId", async (string id, MongoDbService db) =>
@@ -43,5 +39,19 @@ app.MapGet("/GetAllTodos", async (MongoDbService db) =>
     return await db.GetAllTodos();
 }
 );
+app.MapPut("/UpdateTodo", async (Todo todo, MongoDbService db) =>
+{
+    return await db.UpdateTodo(todo);
+});
+app.MapPut("/TurnToIsCompleted", async (IsCompleteDto ýsComplete, MongoDbService db) =>
+{
+    return await db.TurnIscomleted(ýsComplete);
+});
+app.MapDelete("/DeletetTodo", async ([FromBody]DeleteDTO dto, MongoDbService db) =>
+{
+ 
+        return await db.DeleteTodo(dto.Id);
+    
+});
 app.Run();
 

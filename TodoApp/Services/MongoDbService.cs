@@ -10,10 +10,7 @@ namespace TodoApp.Services
     public class MongoDbService:IMongoDbService
     {
         private readonly IMongoCollection<Todo> _collection;
-        public MongoDbService()
-        {
-            
-        }
+       
         public MongoDbService(IOptions<MongoDbSettings> dbSettings)
         {
             var mongoClient = new MongoClient(dbSettings.Value.ConnectionURI);
@@ -25,7 +22,13 @@ namespace TodoApp.Services
             await _collection.InsertOneAsync(todo); 
         return todo;
         }
-        
+
+        public async Task<Todo> DeleteTodo(string id)
+        {
+            var data = await _collection.Find(x => x.Id.Equals(id)).FirstOrDefaultAsync();
+            await _collection.DeleteOneAsync(x=>x.Id.Equals(data.Id));
+            return data; ;
+        }
 
         public async Task<List<Todo>> GetAllTodos() =>await _collection.Find(_=>true).ToListAsync();
 
@@ -40,7 +43,31 @@ namespace TodoApp.Services
             };
             return todo;
         }
-            
-        
+
+        public async Task<Todo> TurnIscomleted(IsCompleteDto ısCompleteDto)
+        {
+            var data=await _collection.Find(x=> x.Id.Equals(ısCompleteDto.Id)).FirstOrDefaultAsync();
+
+            Todo newdata = new Todo()
+            {
+                Id = ısCompleteDto.Id,
+                Name=data.Name,
+                IsComplete = ısCompleteDto.IsComplete
+            };
+            await _collection.ReplaceOneAsync(x=>x.Id.Equals(ısCompleteDto.Id), newdata);
+            return newdata;
+        }
+
+        public async Task<Todo> UpdateTodo(Todo todo)
+        {
+            Todo newdata=new Todo()
+            {
+                Id = todo.Id,
+                Name=todo.Name,
+                IsComplete=todo.IsComplete
+            };
+            var x= await _collection.ReplaceOneAsync(x=>x.Id.Equals(todo.Id), newdata);
+            return newdata;
+        }
     }
 }
