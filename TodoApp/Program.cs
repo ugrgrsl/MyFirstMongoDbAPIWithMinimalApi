@@ -21,14 +21,14 @@ var app = builder.Build();
 //todoItems.MapPost("/", CrudEndpoint.CreateTodo);
 //todoItems.MapPut("/{id}", CrudEndpoint.UpdateTodo);
 //todoItems.MapDelete("/{id}", CrudEndpoint.DeleteTodo);
-//app.MapGet("/",CrudEndpoint.GetCompleteTodos) ;
+//app.MapGet("/",CrudEndpoint.GetCompleteTodos);
 //app.MapPost("/", (TodoModel todo) => CrudEndpoint.AddTodoItem(todo));
 app.MapPost("/AddTodo", async ([FromBody]Todo todo, MongoDbService db) =>
 {
     return await db.AddTodo(todo);
     
 });
-    app.MapGet("/GetTodoWithId", async (string id, MongoDbService db) =>
+ app.MapGet("/GetTodoWithId", async (string id, MongoDbService db) =>
     {
        
         var data= await db.GetTodoAsync(id);

@@ -35,6 +35,7 @@ namespace TodoApp.Services
         public async Task<Todo> GetTodoAsync(string id)
         {
           var data= await _collection.Find(x => x.Id.Equals(id)).FirstOrDefaultAsync();
+            if (data == null) return null;
             Todo todo=new Todo()
             {
                 Id=data.Id,
