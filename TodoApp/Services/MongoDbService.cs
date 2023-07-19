@@ -28,6 +28,7 @@ namespace TodoApp.Services
         public async Task<Todo> DeleteTodo(string id)
         {
             var data = await _collection.Find(x => x.Id.Equals(id)).FirstOrDefaultAsync();
+            if (data == null) return null;
             await _collection.DeleteOneAsync(x=>x.Id.Equals(data.Id));
             return data; ;
         }
@@ -50,7 +51,7 @@ namespace TodoApp.Services
         public async Task<Todo> TurnIscomleted(IsCompleteDto ısCompleteDto)
         {
             var data=await _collection.Find(x=> x.Id.Equals(ısCompleteDto.Id)).FirstOrDefaultAsync();
-
+            if (data == null) return null;
             Todo newdata = new Todo()
             {
                 Id = ısCompleteDto.Id,

@@ -11,8 +11,7 @@ using TodoApp.Models;
 using TodoApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.Configure<MongoDbSettings>(
-    builder.Configuration.GetSection("MongoDb"));
+builder.Services.Configure<MongoDbSettings>(builder.Configuration.GetSection("MongoDb"));
 builder.Services.AddSingleton<MongoDbService>();
 var app = builder.Build();
 
@@ -24,10 +23,9 @@ app.MapPost("/AddTodo", async ([FromBody]Todo todo, MongoDbService db) =>
 });
  app.MapGet("/GetTodoWithId", async (string id, MongoDbService db) =>
     {
-       
         var data= await db.GetTodoAsync(id);
-        
-        return data;
+        if (data == null) return Results.NotFound("there is no todo with that id");
+        return Results.Ok(data);
     });
 app.MapGet("/GetAllTodos", async (MongoDbService db) =>
 {
@@ -36,16 +34,20 @@ app.MapGet("/GetAllTodos", async (MongoDbService db) =>
 );
 app.MapPut("/UpdateTodo", async (Todo todo, MongoDbService db) =>
 {
-    return await db.UpdateTodo(todo);
+    var newdata=await db.UpdateTodo(todo);
+    if(newdata==null) return Results.BadRequest(newdata);
+    return Results.Ok(newdata);
 });
 app.MapPut("/TurnToIsCompleted", async (IsCompleteDto ýsComplete, MongoDbService db) =>
 {
-    return await db.TurnIscomleted(ýsComplete);
+    var data=await db.TurnIscomleted(ýsComplete);
+    if (data==null) return Results.NotFound();
+    return Results.Ok(data);
 });
 app.MapDelete("/DeletetTodo", async ([FromBody]DeleteDTO dto, MongoDbService db) =>
 {
- 
-        return await db.DeleteTodo(dto.Id);
-    
+var deletedData= await db.DeleteTodo(dto.Id);
+    if(deletedData==null) return Results.NotFound();
+    return Results.Ok(deletedData);
 });
 app.Run();
