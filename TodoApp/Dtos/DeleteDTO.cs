@@ -1,4 +1,4 @@
-﻿namespace TodoApp
+﻿namespace TodoApp.Dtos
 {
     public class DeleteDTO
     {

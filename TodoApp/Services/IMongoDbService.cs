@@ -1,4 +1,7 @@
-﻿namespace TodoApp.Services
+﻿using TodoApp.Dtos;
+using TodoApp.Models;
+
+namespace TodoApp.Services
 {
     public interface IMongoDbService
     {

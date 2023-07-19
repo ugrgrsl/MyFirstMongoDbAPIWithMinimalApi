@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using TodoApp.Dtos;
+using TodoApp.Models;
 
 namespace TodoApp.Services
 {

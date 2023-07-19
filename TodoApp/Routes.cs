@@ -1,5 +1,4 @@
-﻿using TodoApp.Endpoints;
-using TodoApp.Services;
+﻿using TodoApp.Services;
 
 namespace TodoApp
 {
