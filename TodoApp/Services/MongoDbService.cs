@@ -1,5 +1,4 @@
-﻿
-using Microsoft.AspNetCore.Http.HttpResults;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
@@ -12,6 +11,7 @@ namespace TodoApp.Services
     public class MongoDbService:IMongoDbService
     {
         private readonly IMongoCollection<Todo> _collection;
+        
        
         public MongoDbService(IOptions<MongoDbSettings> dbSettings)
         {
@@ -24,7 +24,7 @@ namespace TodoApp.Services
             await _collection.InsertOneAsync(todo); 
         return todo;
         }
-
+     
         public async Task<Todo> DeleteTodo(string id)
         {
             var data = await _collection.Find(x => x.Id.Equals(id)).FirstOrDefaultAsync();
