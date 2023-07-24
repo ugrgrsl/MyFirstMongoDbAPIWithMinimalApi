@@ -48,3 +48,10 @@ C:\Users\experilabs\Desktop\todoApp\TodoApp\TodoApp\bin\Debug\net7.0\Swashbuckle
 C:\Users\experilabs\Desktop\todoApp\TodoApp\TodoApp\bin\Debug\net7.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 C:\Users\experilabs\Desktop\todoApp\TodoApp\TodoApp\bin\Debug\net7.0\Swashbuckle.AspNetCore.SwaggerUI.dll
 C:\Users\experilabs\Desktop\todoApp\TodoApp\TodoApp\obj\Debug\net7.0\TodoApp.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\experilabs\Desktop\todoApp\TodoApp\TodoApp\bin\Debug\net7.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\experilabs\Desktop\todoApp\TodoApp\TodoApp\bin\Debug\net7.0\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\Users\experilabs\Desktop\todoApp\TodoApp\TodoApp\bin\Debug\net7.0\Microsoft.IdentityModel.Logging.dll
+C:\Users\experilabs\Desktop\todoApp\TodoApp\TodoApp\bin\Debug\net7.0\Microsoft.IdentityModel.Protocols.dll
+C:\Users\experilabs\Desktop\todoApp\TodoApp\TodoApp\bin\Debug\net7.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\Users\experilabs\Desktop\todoApp\TodoApp\TodoApp\bin\Debug\net7.0\Microsoft.IdentityModel.Tokens.dll
+C:\Users\experilabs\Desktop\todoApp\TodoApp\TodoApp\bin\Debug\net7.0\System.IdentityModel.Tokens.Jwt.dll

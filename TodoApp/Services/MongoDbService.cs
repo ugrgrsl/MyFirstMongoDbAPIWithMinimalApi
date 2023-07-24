@@ -8,7 +8,7 @@ using TodoApp.Models;
 
 namespace TodoApp.Services
 {
-    public class MongoDbService:IMongoDbService
+    public class MongoDbService : IMongoDbService
     {
         private readonly IMongoCollection<Todo> _collection;
         
@@ -20,9 +20,16 @@ namespace TodoApp.Services
             _collection=mongoDatabase.GetCollection<Todo>(dbSettings.Value.CollectionName);   
         }
 
-        public async Task<Todo> AddTodo(Todo todo) { 
-            await _collection.InsertOneAsync(todo); 
-        return todo;
+        public async Task<Todo> AddTodo(AddTodoRequestDto todo) {
+            Todo newTodo = new Todo()
+            {
+                Name = todo.Name,
+                UserId = todo.UserId,
+                IsComplete = todo.IsComplete,
+            };
+
+            await _collection.InsertOneAsync(newTodo); 
+        return newTodo;
         }
      
         public async Task<Todo> DeleteTodo(string id)
@@ -46,6 +53,13 @@ namespace TodoApp.Services
                 IsComplete=data.IsComplete
             };
             return todo;
+        }
+
+        public async Task<List<Todo>> GetTodoWithUserIdAsync(string id)
+        {
+            var data = await _collection.Find(x => x.UserId.Equals(id)).ToListAsync();
+            if (data == null || data.Count()==0) return null;
+            return data;
         }
 
         public async Task<Todo> TurnIscomleted(IsCompleteDto ısCompleteDto)

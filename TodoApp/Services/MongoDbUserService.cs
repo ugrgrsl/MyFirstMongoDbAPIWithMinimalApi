@@ -43,11 +43,13 @@ namespace TodoApp.Services
             if (data == null) return null;
             var result=PasswordHaasher.Verify(data.Password,user.Password);
             if (!result) return null;
+            var jwtToken = JwtCreator.CreateJwt(data);
+            
             ResponseLoginUserDto responseLoginUserDto = new ResponseLoginUserDto()
             {
                 Id = data.Id,
                 Username = user.UserName,
-                Jwt = null
+                Jwt = jwtToken
             };
             return responseLoginUserDto;
         }
