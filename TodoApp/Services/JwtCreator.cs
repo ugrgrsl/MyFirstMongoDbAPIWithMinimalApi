@@ -9,8 +9,8 @@ namespace TodoApp.Services
     public class JwtCreator
     {
         private const string TokenSecret = "MySuperSecretKeyWithAtLeast128Bits";
-        private static readonly TimeSpan TokenLifeTime = TimeSpan.FromHours(15);
-
+        private static readonly TimeSpan TokenLifeTime = TimeSpan.FromMinutes(5);
+        
         public static string CreateJwt(User user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -22,7 +22,7 @@ namespace TodoApp.Services
                 {
                     new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                     new Claim(ClaimTypes.Name, user.UserName),
-                    new Claim("Isadmin", user.IsAdmin.ToString()),
+                    new Claim("IsAdmin", user.IsAdmin.ToString()),
                     
                     // Eğer kullanıcınızın rolleri varsa, burada rolleri de ekleyebilirsiniz.
                 }),

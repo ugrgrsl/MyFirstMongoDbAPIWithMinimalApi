@@ -53,7 +53,8 @@ builder.Services.AddAuthentication(x =>
         ValidateIssuer = true,
         ValidateAudience = true,
         ValidateLifetime = true,
-        ValidateIssuerSigningKey = true
+        ValidateIssuerSigningKey = true,
+        ClockSkew=TimeSpan.FromMinutes(5)
     }
     ) ;
 builder.Services.AddAuthorization(options =>
@@ -63,6 +64,11 @@ builder.Services.AddAuthorization(options =>
     .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
     .RequireAuthenticatedUser()
     .Build();
+    options.AddPolicy("OnlyAdmin",policy =>
+    {
+        policy.RequireClaim("IsAdmin", "True");
+    } );
+
 });
 
 var app = builder.Build();
@@ -78,18 +84,19 @@ app.UseSwaggerUI(c =>
 app.UseAuthentication();
 app.UseAuthorization();
 #region endpoints
+
 #region UserEndpoints
 var user =app.MapGroup("/user");
 user.MapGet("/getAllUsers", async (MongoDbUserService db) =>
 {
     return await db.GetAllUsers();
-});
+}).RequireAuthorization("OnlyAdmin");
 user.MapGet("/getUserById", async (string id, MongoDbUserService db) => 
 { 
     var data=await db.GetUserById(id);
     if (data == null) return Results.NotFound();
     return Results.Ok(data);
-});
+}).RequireAuthorization("OnlyAdmin");
 user.MapPost("/login", async (LoginReqDto dto,MongoDbUserService db) =>
 {
     var user = await db.LoginUser(dto);
@@ -104,7 +111,7 @@ user.MapPost("register", async (RegisterDto newUser, MongoDbUserService db) =>
     var data= await db.RegisterUser(newUser);
    
     return Results.Ok(data);
-});
+}).AllowAnonymous();
 user.MapPut("upddateUser", async (User newUser, MongoDbUserService db) =>
 {
     var data = await db.UpdateUser(newUser);
@@ -116,51 +123,50 @@ user.MapDelete("/deleteUser", async (string id, MongoDbUserService db) =>
     var data=await db.DeleteUserById(id);
     if (data == null) return Results.NotFound("this user is not exist");
     return Results.Ok(data);
-});
+}).RequireAuthorization("OnlyAdmin");
 #endregion
-#region TodoEndpoints
 
-app.MapPost("/AddTodo", async ([FromBody] AddTodoRequestDto todo, MongoDbService db) =>
+#region TodoEndpoints
+var todoapp = app.MapGroup("/todo");
+todoapp.MapPost("/AddTodo", async ([FromBody] AddTodoRequestDto todo, MongoDbService db) =>
 {
     return await db.AddTodo(todo);
 
 });
-
- app.MapGet("/GetTodoWithId", async (string id, MongoDbService db) =>
+todoapp.MapGet("/GetTodoWithId", async (string id, MongoDbService db) =>
     {
         var data= await db.GetTodoAsync(id);
         if (data == null) return Results.NotFound("there is no todo with that id");
         return Results.Ok(data);
     });
-app.MapGet("/GetAllTodos", async (MongoDbService db) =>
+todoapp.MapGet("/GetAllTodos", async (MongoDbService db) =>
 {
     return await db.GetAllTodos();
-}
-);
-app.MapGet("/GetAllTodosWithUserId",async(string id, MongoDbService db)=>{
+});
+todoapp.MapGet("/GetAllTodosWithUserId",async(string id, MongoDbService db)=>{
     var data=await db.GetTodoWithUserIdAsync(id);
     if (data == null) return Results.NotFound("This user has not any todo");
     return Results.Ok(data);
-}).AllowAnonymous() ;
-app.MapPut("/UpdateTodo", async (Todo todo, MongoDbService db) =>
+});
+todoapp.MapPut("/UpdateTodo", async (Todo todo, MongoDbService db) =>
 {
     var newdata=await db.UpdateTodo(todo);
     if(newdata==null) return Results.BadRequest(newdata);
     return Results.Ok(newdata);
 });
-app.MapPut("/TurnToIsCompleted", async (IsCompleteDto ýsComplete, MongoDbService db) =>
+todoapp.MapPut("/TurnToIsCompleted", async (IsCompleteDto ýsComplete, MongoDbService db) =>
 {
     var data=await db.TurnIscomleted(ýsComplete);
     if (data==null) return Results.NotFound();
     return Results.Ok(data);
 });
-
-app.MapDelete("/DeletetTodo", async ([FromBody]DeleteDTO dto, MongoDbService db) =>
+todoapp.MapDelete("/DeletetTodo", async ([FromBody]DeleteDTO dto, MongoDbService db) =>
 {
 var deletedData= await db.DeleteTodo(dto.Id);
     if(deletedData==null) return Results.NotFound();
     return Results.Ok(deletedData);
 });
 #endregion
+
 #endregion
 app.Run();
