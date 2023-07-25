@@ -16,6 +16,7 @@ using System.Text.Json;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using TodoApp.EndpointHandlers;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.Configure<MongoDbSettings>(builder.Configuration.GetSection("MongoDbTodo"));
@@ -89,40 +90,27 @@ app.UseAuthorization();
 var user =app.MapGroup("/user");
 user.MapGet("/getAllUsers", async (MongoDbUserService db) =>
 {
-    return await db.GetAllUsers();
+    return await new UserEndpointHandler(db).GetAllUser();
 }).RequireAuthorization("OnlyAdmin");
 user.MapGet("/getUserById", async (string id, MongoDbUserService db) => 
 { 
-    var data=await db.GetUserById(id);
-    if (data == null) return Results.NotFound();
-    return Results.Ok(data);
+   return await new UserEndpointHandler(db).GetUserById(id);
 }).RequireAuthorization("OnlyAdmin");
 user.MapPost("/login", async (LoginReqDto dto,MongoDbUserService db) =>
 {
-    var user = await db.LoginUser(dto);
-    if (user == null) return Results.NotFound();
-
-
-        return Results.Ok(user);
+    return await new UserEndpointHandler(db).Login(dto);
 }).AllowAnonymous();
 user.MapPost("register", async (RegisterDto newUser, MongoDbUserService db) =>
 {
-  
-    var data= await db.RegisterUser(newUser);
-   
-    return Results.Ok(data);
+    return await new UserEndpointHandler(db).Register(newUser);
 }).AllowAnonymous();
 user.MapPut("upddateUser", async (User newUser, MongoDbUserService db) =>
 {
-    var data = await db.UpdateUser(newUser);
-    if (data == null) Results.NotFound("Tere is no user like that");
-    return Results.Ok(data);
+   return await new UserEndpointHandler(db).UpdateUser(newUser);
 });
 user.MapDelete("/deleteUser", async (string id, MongoDbUserService db) =>
 {
-    var data=await db.DeleteUserById(id);
-    if (data == null) return Results.NotFound("this user is not exist");
-    return Results.Ok(data);
+   return await new UserEndpointHandler(db).DeleteUserById(id);
 }).RequireAuthorization("OnlyAdmin");
 #endregion
 
@@ -130,41 +118,30 @@ user.MapDelete("/deleteUser", async (string id, MongoDbUserService db) =>
 var todoapp = app.MapGroup("/todo");
 todoapp.MapPost("/AddTodo", async ([FromBody] AddTodoRequestDto todo, MongoDbService db) =>
 {
-    return await db.AddTodo(todo);
-
+    return await new TodoEndpointHandlers(db).AddTodo(todo);
 });
 todoapp.MapGet("/GetTodoWithId", async (string id, MongoDbService db) =>
     {
-        var data= await db.GetTodoAsync(id);
-        if (data == null) return Results.NotFound("there is no todo with that id");
-        return Results.Ok(data);
+        return await new TodoEndpointHandlers(db).GetTodoWithId(id); 
     });
 todoapp.MapGet("/GetAllTodos", async (MongoDbService db) =>
 {
-    return await db.GetAllTodos();
-});
+    return await new TodoEndpointHandlers(db).GetAllTodos();
+}).RequireAuthorization("OnlyAdmin");
 todoapp.MapGet("/GetAllTodosWithUserId",async(string id, MongoDbService db)=>{
-    var data=await db.GetTodoWithUserIdAsync(id);
-    if (data == null) return Results.NotFound("This user has not any todo");
-    return Results.Ok(data);
+   return await new TodoEndpointHandlers(db).GetTodosWithUserId(id);
 });
 todoapp.MapPut("/UpdateTodo", async (Todo todo, MongoDbService db) =>
 {
-    var newdata=await db.UpdateTodo(todo);
-    if(newdata==null) return Results.BadRequest(newdata);
-    return Results.Ok(newdata);
+    return await new TodoEndpointHandlers(db).UpdateTodo(todo);
 });
 todoapp.MapPut("/TurnToIsCompleted", async (IsCompleteDto ýsComplete, MongoDbService db) =>
 {
-    var data=await db.TurnIscomleted(ýsComplete);
-    if (data==null) return Results.NotFound();
-    return Results.Ok(data);
+    return await new TodoEndpointHandlers(db).TurnToIsCompleted(ýsComplete);
 });
 todoapp.MapDelete("/DeletetTodo", async ([FromBody]DeleteDTO dto, MongoDbService db) =>
 {
-var deletedData= await db.DeleteTodo(dto.Id);
-    if(deletedData==null) return Results.NotFound();
-    return Results.Ok(deletedData);
+return await new TodoEndpointHandlers(db).DeleteTodo(dto);
 });
 #endregion
 
