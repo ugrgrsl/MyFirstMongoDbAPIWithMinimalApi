@@ -49,12 +49,27 @@ namespace TodoApp.Services
             {
                 Id = data.Id,
                 Username = user.UserName,
-                Jwt = jwtToken
+                AccesToken = jwtToken
             };
             return responseLoginUserDto;
         }
+
+        public async Task<ResponseRefreshUserDto> RefreshToken(RequestRefreshUserDto user)
+        {
+            var data = await _collection.Find(x => x.Id.Equals(user.UserId)).FirstOrDefaultAsync();
+            if (data == null) return null;
+            var token=JwtCreator.CreateJwt(data);
+            ResponseRefreshUserDto response = new ResponseRefreshUserDto()
+            { 
+                Id= data.Id,
+                UserName=data.UserName,
+                RefreshToken = token
+            };
+            return response;
+        }
+
         // bu alana iki dto eklemen lazım
-        
+
         public async Task<User> RegisterUser(RegisterDto user)
         {
             var passwordHash = PasswordHaasher.Hash(user.Password);

@@ -4,7 +4,7 @@
     {
         public string Id { get; set; }
         public string Username { get; set; }
-        public string Jwt { get; set; }
+        public string AccesToken { get; set; }
 
     }
 }

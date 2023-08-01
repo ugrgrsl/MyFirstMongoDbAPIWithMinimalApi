@@ -9,6 +9,7 @@ namespace TodoApp.Services
     public class JwtCreator
     {
         private const string TokenSecret = "MySuperSecretKeyWithAtLeast128Bits";
+        //TODO: read key from env file
         private static readonly TimeSpan TokenLifeTime = TimeSpan.FromMinutes(5);
         
         public static string CreateJwt(User user)

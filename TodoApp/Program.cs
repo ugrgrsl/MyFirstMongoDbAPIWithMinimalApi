@@ -25,6 +25,16 @@ builder.Services.AddSingleton<MongoDbService>();
 builder.Services.Configure<MongoDbUsersSettings>(builder.Configuration.GetSection("MongoDbUser"));
 builder.Services.AddSingleton<MongoDbUserService>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", builder =>
+    {
+        builder.AllowAnyOrigin()
+        .AllowAnyHeader()
+        .AllowAnyMethod();
+    });
+}
+);
 // Add Swagger configuration in the Program.cs file
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -84,66 +94,5 @@ app.UseSwaggerUI(c =>
 };
 app.UseAuthentication();
 app.UseAuthorization();
-#region endpoints
-
-#region UserEndpoints
-var user =app.MapGroup("/user");
-user.MapGet("/getAllUsers", async (MongoDbUserService db) =>
-{
-    return await new UserEndpointHandler(db).GetAllUser();
-}).RequireAuthorization("OnlyAdmin");
-user.MapGet("/getUserById", async (string id, MongoDbUserService db) => 
-{ 
-   return await new UserEndpointHandler(db).GetUserById(id);
-}).RequireAuthorization("OnlyAdmin");
-user.MapPost("/login", async (LoginReqDto dto,MongoDbUserService db) =>
-{
-    return await new UserEndpointHandler(db).Login(dto);
-}).AllowAnonymous();
-user.MapPost("register", async (RegisterDto newUser, MongoDbUserService db) =>
-{
-    return await new UserEndpointHandler(db).Register(newUser);
-}).AllowAnonymous();
-user.MapPut("upddateUser", async (User newUser, MongoDbUserService db) =>
-{
-   return await new UserEndpointHandler(db).UpdateUser(newUser);
-});
-user.MapDelete("/deleteUser", async (string id, MongoDbUserService db) =>
-{
-   return await new UserEndpointHandler(db).DeleteUserById(id);
-}).RequireAuthorization("OnlyAdmin");
-#endregion
-
-#region TodoEndpoints
-var todoapp = app.MapGroup("/todo");
-todoapp.MapPost("/AddTodo", async ([FromBody] AddTodoRequestDto todo, MongoDbService db) =>
-{
-    return await new TodoEndpointHandlers(db).AddTodo(todo);
-});
-todoapp.MapGet("/GetTodoWithId", async (string id, MongoDbService db) =>
-    {
-        return await new TodoEndpointHandlers(db).GetTodoWithId(id); 
-    });
-todoapp.MapGet("/GetAllTodos", async (MongoDbService db) =>
-{
-    return await new TodoEndpointHandlers(db).GetAllTodos();
-}).RequireAuthorization("OnlyAdmin");
-todoapp.MapGet("/GetAllTodosWithUserId",async(string id, MongoDbService db)=>{
-   return await new TodoEndpointHandlers(db).GetTodosWithUserId(id);
-});
-todoapp.MapPut("/UpdateTodo", async (Todo todo, MongoDbService db) =>
-{
-    return await new TodoEndpointHandlers(db).UpdateTodo(todo);
-});
-todoapp.MapPut("/TurnToIsCompleted", async (IsCompleteDto ýsComplete, MongoDbService db) =>
-{
-    return await new TodoEndpointHandlers(db).TurnToIsCompleted(ýsComplete);
-});
-todoapp.MapDelete("/DeletetTodo", async ([FromBody]DeleteDTO dto, MongoDbService db) =>
-{
-return await new TodoEndpointHandlers(db).DeleteTodo(dto);
-});
-#endregion
-
-#endregion
+Endpoints.EndpointRoutes(app);
 app.Run();

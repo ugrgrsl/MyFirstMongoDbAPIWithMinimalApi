@@ -6,7 +6,7 @@ namespace TodoApp.EndpointHandlers
 {
     public class UserEndpointHandler
     {
-        private readonly IMongoDbUserService _mongoDbUser;
+        private readonly IMongoDbUserService _mongoDbUser;  
         public UserEndpointHandler(MongoDbUserService mongoDbUser)
         {
             _mongoDbUser = mongoDbUser;
@@ -19,6 +19,11 @@ namespace TodoApp.EndpointHandlers
         {
             var data = await _mongoDbUser.GetUserById(id);
             if (data == null) return Results.NotFound();
+            return Results.Ok(data);
+        }
+        public async Task<IResult> RefreshToken(RequestRefreshUserDto dto)
+        {
+            var data =await _mongoDbUser.RefreshToken(dto);
             return Results.Ok(data);
         }
         public async Task<IResult> Login(LoginReqDto dto)
