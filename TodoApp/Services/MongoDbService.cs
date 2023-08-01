@@ -70,6 +70,7 @@ namespace TodoApp.Services
             {
                 Id = ısCompleteDto.Id,
                 Name=data.Name,
+                UserId=data.UserId,
                 IsComplete = ısCompleteDto.IsComplete
             };
             await _collection.ReplaceOneAsync(x=>x.Id.Equals(ısCompleteDto.Id), newdata);
@@ -82,6 +83,7 @@ namespace TodoApp.Services
             {
                 Id = todo.Id,
                 Name=todo.Name,
+                UserId=todo.UserId,
                 IsComplete=todo.IsComplete
             };
             var x= await _collection.ReplaceOneAsync(x=>x.Id.Equals(todo.Id), newdata);
