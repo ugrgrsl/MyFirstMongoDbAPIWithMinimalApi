@@ -65,7 +65,7 @@ builder.Services.AddAuthentication(x =>
         ValidateAudience = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-        ClockSkew=TimeSpan.FromMinutes(5)
+        ClockSkew=TimeSpan.FromMinutes(15)
     }
     ) ;
 builder.Services.AddAuthorization(options =>
@@ -92,6 +92,7 @@ app.UseSwaggerUI(c =>
     c.RoutePrefix = string.Empty; // To serve the Swagger UI at the root URL
 });
 };
+app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
 Endpoints.EndpointRoutes(app);
