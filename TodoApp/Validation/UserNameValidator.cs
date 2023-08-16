@@ -8,8 +8,11 @@ namespace TodoApp.Validation
     {
         public UserNameValidator()
         {
-            RuleFor(x => x.Username).NotEmpty()
-                .MinimumLength(5);
+            RuleFor(x => x.Username).NotEmpty().
+                WithMessage("Username con not be empty")
+                .MinimumLength(5).
+                WithMessage("Username contains at least 5 characters");
+                
         }
     }
 }
