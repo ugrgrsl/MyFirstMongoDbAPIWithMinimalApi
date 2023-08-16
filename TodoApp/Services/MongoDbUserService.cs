@@ -80,6 +80,7 @@ namespace TodoApp.Services
                 Password = passwordHash
             };
             await _collection.InsertOneAsync(newUser);
+         
             return newUser;
         }
 

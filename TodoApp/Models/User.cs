@@ -17,6 +17,7 @@ namespace TodoApp.Models
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
         public string? UserName{ get; set; }
+        [JsonIgnore]
         public string? Password { get; set; }
         public bool IsAdmin { get; set; } = false;
 

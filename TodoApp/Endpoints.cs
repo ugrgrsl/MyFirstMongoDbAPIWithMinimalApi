@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
 using TodoApp.Dtos;
 using TodoApp.EndpointHandlers;
 using TodoApp.Models;
@@ -31,8 +32,14 @@ namespace TodoApp
             {
                 return await new UserEndpointHandler(db).Login(dto);
             }).AllowAnonymous();
-            user.MapPost("register", async (RegisterDto newUser, MongoDbUserService db) =>
+            user.MapPost("register", async (RegisterDto newUser, IValidator<RegisterDto> validator,MongoDbUserService db) =>
             {
+                var validationResult = validator.Validate(newUser);
+                if(!validationResult.IsValid)
+                {
+                    var errors=validationResult.Errors.Select(err=>err.ErrorMessage).ToList();
+                    return Results.BadRequest(errors);
+                }
                 return await new UserEndpointHandler(db).Register(newUser);
             }).AllowAnonymous();
             user.MapPut("upddateUser", async (User newUser, MongoDbUserService db) =>

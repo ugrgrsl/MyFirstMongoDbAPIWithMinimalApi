@@ -17,11 +17,12 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using TodoApp.EndpointHandlers;
+using FluentValidation.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.Configure<MongoDbSettings>(builder.Configuration.GetSection("MongoDbTodo"));
 builder.Services.AddSingleton<MongoDbService>();
-
+builder.Services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<User>());
 builder.Services.Configure<MongoDbUsersSettings>(builder.Configuration.GetSection("MongoDbUser"));
 builder.Services.AddSingleton<MongoDbUserService>();
 
@@ -93,7 +94,7 @@ app.UseSwaggerUI(c =>
 });
 };
 app.UseCors("AllowAll");
-app.UseAuthentication();
+app.UseAuthentication();    
 app.UseAuthorization();
 Endpoints.EndpointRoutes(app);
 app.Run();

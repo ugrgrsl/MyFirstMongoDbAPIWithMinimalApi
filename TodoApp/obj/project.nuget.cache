@@ -1,12 +1,15 @@
 {
   "version": 2,
-  "dgSpecHash": "qiySX8BbMgXsX3f1XThR+8jky1NpevUqi02VRUzBcb853cBtiHveTKvFL8bhlPSQ7kaHq+6CqB/2RlgMYHXjgw==",
+  "dgSpecHash": "F29TFK14dQpPZHV6jm9oI1ZySWMJIg2Fi7+HoJC9Eu0U3zXcch4lbE4Rxll1w6ortNmOKEUTLhfCerGHUFz8NA==",
   "success": true,
   "projectFilePath": "C:\\Users\\experilabs\\Desktop\\todoApp\\TodoApp\\TodoApp\\TodoApp.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\experilabs\\.nuget\\packages\\awssdk.core\\3.7.100.14\\awssdk.core.3.7.100.14.nupkg.sha512",
     "C:\\Users\\experilabs\\.nuget\\packages\\awssdk.securitytoken\\3.7.100.14\\awssdk.securitytoken.3.7.100.14.nupkg.sha512",
     "C:\\Users\\experilabs\\.nuget\\packages\\dnsclient\\1.6.1\\dnsclient.1.6.1.nupkg.sha512",
+    "C:\\Users\\experilabs\\.nuget\\packages\\fluentvalidation\\11.7.1\\fluentvalidation.11.7.1.nupkg.sha512",
+    "C:\\Users\\experilabs\\.nuget\\packages\\fluentvalidation.aspnetcore\\11.3.0\\fluentvalidation.aspnetcore.11.3.0.nupkg.sha512",
+    "C:\\Users\\experilabs\\.nuget\\packages\\fluentvalidation.dependencyinjectionextensions\\11.7.1\\fluentvalidation.dependencyinjectionextensions.11.7.1.nupkg.sha512",
     "C:\\Users\\experilabs\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\7.0.9\\microsoft.aspnetcore.authentication.jwtbearer.7.0.9.nupkg.sha512",
     "C:\\Users\\experilabs\\.nuget\\packages\\microsoft.aspnetcore.diagnostics.entityframeworkcore\\7.0.9\\microsoft.aspnetcore.diagnostics.entityframeworkcore.7.0.9.nupkg.sha512",
     "C:\\Users\\experilabs\\.nuget\\packages\\microsoft.csharp\\4.5.0\\microsoft.csharp.4.5.0.nupkg.sha512",

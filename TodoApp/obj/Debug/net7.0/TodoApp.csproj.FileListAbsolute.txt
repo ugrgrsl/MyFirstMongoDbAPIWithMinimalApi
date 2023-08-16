@@ -55,3 +55,6 @@ C:\Users\experilabs\Desktop\todoApp\TodoApp\TodoApp\bin\Debug\net7.0\Microsoft.I
 C:\Users\experilabs\Desktop\todoApp\TodoApp\TodoApp\bin\Debug\net7.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 C:\Users\experilabs\Desktop\todoApp\TodoApp\TodoApp\bin\Debug\net7.0\Microsoft.IdentityModel.Tokens.dll
 C:\Users\experilabs\Desktop\todoApp\TodoApp\TodoApp\bin\Debug\net7.0\System.IdentityModel.Tokens.Jwt.dll
+C:\Users\experilabs\Desktop\todoApp\TodoApp\TodoApp\bin\Debug\net7.0\FluentValidation.dll
+C:\Users\experilabs\Desktop\todoApp\TodoApp\TodoApp\bin\Debug\net7.0\FluentValidation.AspNetCore.dll
+C:\Users\experilabs\Desktop\todoApp\TodoApp\TodoApp\bin\Debug\net7.0\FluentValidation.DependencyInjectionExtensions.dll
